@@ -1,0 +1,5 @@
+The other two textfiles had line breakes all over them. This made it harder to deside what is a paragraph and what is not! This new file is more like a real doc or docx file where each paragraph is ended with a new line character.
+Therefore will this become the second paragraph and the count will start all over again. Now all that is left is to use this file.
+This makes the function easy to brake because it relies on a spesific structure of the file in order to work. This cant always be guaranteed!
+But its better to have something that works in order to show the consept of the code?
+The last paragraph in a document is often just ended with one of these (dot, exclamation mark, question mark) this results in the last paragraph not counting as a paragraph because its missing an new line char at the end.Just for this demonstration, i have added a new line at the end of every paragraph.
