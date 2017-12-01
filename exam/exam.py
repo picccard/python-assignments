@@ -2,7 +2,7 @@
 
 	Title:     exam.py
 	Date:      30.11.2017
-    Subject:   IINI4014_A
+    	Subject:   IINI4014_A
 	Author:    10013
 
 """
