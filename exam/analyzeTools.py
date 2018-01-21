@@ -5,7 +5,7 @@ import string
 def file_to_word_array(myFile):
     '''
     Reads a file and returns an array of the words.
-    Tries to remove some if the punctuation
+    Tries to remove some of the punctuation
     '''
     try:
         with open(myFile, 'r') as f:
@@ -17,7 +17,7 @@ def file_to_word_array(myFile):
 
 def countWords(word_array):
     '''
-    Takes an array of words an argument.
+    Takes an array of words as an argument.
     Goes through every index and adds every unique element to the dictionary's keys.
     Every key got it's own dictionary.
     For every index, we update the count of the following element in the array.
