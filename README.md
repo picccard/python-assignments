@@ -1,2 +1,2 @@
 # python-assignments
-A collection with some of my python-assignmnets and experiments.
+A collection with some of my python-assignments and experiments.
