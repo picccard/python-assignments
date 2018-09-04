@@ -10,7 +10,7 @@
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 for day in days:
     print(day)
-print('Lenth of {} is: {}'.format(days ,len(days)))
+print('Lenth of {} is: {}'.format(days, len(days)))
 days.sort() # Sorts the list
 # sorted(days) # This return the list sorted, but doesn't change the orginal list
 print('{} is now sorted'.format(days))
