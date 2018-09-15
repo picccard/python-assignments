@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1>Add a news article</h1>
+    <form method="post" action="/news" id="articleform">
+
+        <div class="form-group">
+            <label for="article_title">Title:</label>
+            <input type="text" class="form-control" id="article_title">
+        </div>
+
+        <div class="form-group">
+             <label for="article_text">Text in article:</label>
+             <textarea class="form-control" rows="5" id="article_text"form="articleform" placeholder="Enter article here..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="author">Author:</label>
+                <select class="form-control" id="author">
+                 <option value="svend_andreas">Svend Andreas</option>
+                 <option value="walter">Walter</option>
+                 <option value="per">Per</option>
+                 <option value="grethe">Grethe</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-dark">Save news article</button>
+
+    </form>
+{% endblock content %}
