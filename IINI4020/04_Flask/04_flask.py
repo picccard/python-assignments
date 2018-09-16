@@ -1,3 +1,11 @@
+"""
+
+	Title:	04_flask.py
+	Date:	15.09.2018
+	Author:	Eskil Uhlving Larsen
+
+"""
+
 from flask import Flask, render_template, url_for
 app = Flask(__name__)
 
@@ -29,7 +37,7 @@ def about():
 def add_news():
     return render_template('add-news.html', title='Add News Article')
 
-@app.route('/news')
+@app.route('/news', methods=['POST', 'GET']) # Allows both GET and POST requests (when the form is submitted)
 def display_news():
     return render_template('news.html', title='News', news=news)
 
