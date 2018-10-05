@@ -11,6 +11,8 @@ from flask_login import login_user, current_user, logout_user, login_required
 '''
 Grabs all the articles in the DB, turns the list around and renders
 '''
+
+
 @app.route('/')
 @app.route('/home')
 @app.route('/news')
@@ -46,6 +48,7 @@ def edit_article(article_id):
         form.content.data = article.content
     return render_template('create-article.html', title='Edit Article', legend='Edit Article', form=form)
 
+
 @app.route('/news/<int:article_id>/delete', methods=['POST'])
 @login_required
 def delete_article(article_id):
@@ -57,18 +60,23 @@ def delete_article(article_id):
     flash('You article has been deleted!', category='success')
     return redirect(url_for('show_article_all'))
 
+
 '''
 Creates an ArticleForm, if the form is submitted then the data is saved to the DB
 and we returns to the news-page with a successfull notification.
 If the form is not submitted, it just gets presented.
 '''
+
+
 @app.route('/news/add', methods=['GET', 'POST'])
 @login_required
 def new_article():
     form = ArticleForm()
     if form.validate_on_submit():
         # Creates the article and saves it to the DB
-        article = Article(title=form.title.data, content=form.content.data, author=current_user) #can also use user_id instead of author
+        # can also use user_id instead of author
+        article = Article(title=form.title.data,
+                          content=form.content.data, author=current_user)
         db.session.add(article)
         db.session.commit()
         # Feedback and redirect to all news
@@ -77,21 +85,25 @@ def new_article():
     # Regular GET-requests just gets the empty form
     return render_template('create-article.html', title='Add News Article', legend='New Article', form=form)
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('show_article_all'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_pw)
+        hashed_pw = bcrypt.generate_password_hash(
+            form.password.data).decode('utf-8')
+        user = User(username=form.username.data,
+                    email=form.email.data, password=hashed_pw)
         db.session.add(user)
         db.session.commit()
         flash(f'Account for {form.username.data} created!', category='success')
         redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route('/login' , methods=['GET', 'POST'])
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('show_article_all'))
@@ -106,21 +118,25 @@ def login():
             flash('Login Unsuccessful. Check email and password.', category='danger')
     return render_template('login.html', title='Login', form=form)
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('show_article_all'))
 
+
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    picture_path = os.path.join(
+        app.root_path, 'static/profile_pics', picture_fn)
     output_size = (125, 125)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
     return picture_fn
+
 
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
@@ -138,6 +154,7 @@ def account():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    image_file = url_for(
+        'static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account',
-                                image_file=image_file, form=form)
+                           image_file=image_file, form=form)
