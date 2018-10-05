@@ -9,8 +9,8 @@ from blog.models import User
 class ArticleForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
-    author = StringField('Author', validators=[DataRequired()])
-    submit = SubmitField('Post')
+    # author = StringField('Author', validators=[DataRequired()])
+    submit = SubmitField('Add News')
 
 
 class RegistrationForm(FlaskForm):

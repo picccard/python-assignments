@@ -1,7 +1,7 @@
 import os
 import secrets
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from blog import app, db, bcrypt
 from blog.forms import ArticleForm, RegistrationForm, LoginForm, UpdateAccountForm
 from blog.models import Article, User
@@ -15,11 +15,47 @@ Grabs all the articles in the DB, turns the list around and renders
 @app.route('/home')
 @app.route('/news')
 @login_required
-def display_news():
+def show_article_all():
     articles = Article.query.all()
     # Turns the list around so the newest entries comes on top
     articles = reversed(articles)
     return render_template('news.html', title='News', articles=articles)
+
+
+@app.route('/news/<int:article_id>')
+def show_article(article_id):
+    article = Article.query.get_or_404(article_id)
+    return render_template('article.html', title=article.title, article=article)
+
+
+@app.route('/news/<int:article_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_article(article_id):
+    article = Article.query.get_or_404(article_id)
+    if article.author != current_user:
+        abort(403)
+    form = ArticleForm()
+    if form.validate_on_submit():
+        article.title = form.title.data
+        article.content = form.content.data
+        db.session.commit()
+        flash('Article has been edited!', category='success')
+        return redirect(url_for('show_article', article_id=article.id))
+    elif request.method == 'GET':
+        form.title.data = article.title
+        form.content.data = article.content
+    return render_template('create-article.html', title='Edit Article', legend='Edit Article', form=form)
+
+@app.route('/news/<int:article_id>/delete', methods=['POST'])
+@login_required
+def delete_article(article_id):
+    article = Article.query.get_or_404(article_id)
+    if article.author != current_user:
+        abort(403)
+    db.session.delete(article)
+    db.session.commit()
+    flash('You article has been deleted!', category='success')
+    return redirect(url_for('show_article_all'))
 
 '''
 Creates an ArticleForm, if the form is submitted then the data is saved to the DB
@@ -27,23 +63,24 @@ and we returns to the news-page with a successfull notification.
 If the form is not submitted, it just gets presented.
 '''
 @app.route('/news/add', methods=['GET', 'POST'])
+@login_required
 def new_article():
     form = ArticleForm()
     if form.validate_on_submit():
         # Creates the article and saves it to the DB
-        article = Article(title=form.title.data, content=form.content.data, user_id=1) #author=form.author.data
+        article = Article(title=form.title.data, content=form.content.data, author=current_user) #can also use user_id instead of author
         db.session.add(article)
         db.session.commit()
         # Feedback and redirect to all news
-        flash('Your article has been created!', 'success')
-        return redirect(url_for('display_news'))
+        flash('Your article has been created!', category='success')
+        return redirect(url_for('show_article_all'))
     # Regular GET-requests just gets the empty form
     return render_template('create-article.html', title='Add News Article', legend='New Article', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('display_news'))
+        return redirect(url_for('show_article_all'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -57,14 +94,14 @@ def register():
 @app.route('/login' , methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('display_news'))
+        return redirect(url_for('show_article_all'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('display_news'))
+            return redirect(next_page) if next_page else redirect(url_for('show_article_all'))
         else:
             flash('Login Unsuccessful. Check email and password.', category='danger')
     return render_template('login.html', title='Login', form=form)
@@ -72,7 +109,7 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('display_news'))
+    return redirect(url_for('show_article_all'))
 
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)

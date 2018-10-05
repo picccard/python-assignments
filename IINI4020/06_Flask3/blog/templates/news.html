@@ -3,12 +3,13 @@
     {% if articles %}
     {% for article in articles %}
         <article class="media content-section">
+            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + article.author.image_file) }}" alt="ProfilePic">
             <div class="media-body">
             <div class="article-metadata">
               <a class="mr-2" href="#">{{ article.author.username }}</a>
               <small class="text-muted">{{ article.date_posted.strftime('%Y-%m-%d') }}</small>
             </div>
-            <h2><a class="article-title" href="#">{{ article.title }}</a></h2>
+            <h2><a class="article-title" href="{{ url_for('show_article', article_id=article.id) }}">{{ article.title }}</a></h2>
             <p class="article-content">{{ article.content }}</p>
             </div>
         </article>
