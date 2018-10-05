@@ -4,8 +4,8 @@
     <div class="media">
         <img class="rounded-circle account-img" src="{{ image_file }}">
         <div class="media-body">
-            <h2 class="account-heading">{{ current_user.username }}</h2>
-            <p class="text-secondary">{{ current_user.email }}</p>
+            <h2 class="account-heading">{{ form.username.data }}</h2>
+            <p class="text-secondary">{{ form.email.data }}</p>
         </div>
     </div>
 
@@ -49,9 +49,11 @@
                 {% endif %}
             </div>
         </fieldset>
+        {% if form.submit %}
         <div class="form-group">
             {{ form.submit(class="btn btn-outline-info") }}
         </div>
+        {% endif %}
     </form>
 
 </div>

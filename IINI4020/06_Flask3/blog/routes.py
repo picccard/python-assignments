@@ -158,3 +158,20 @@ def account():
         'static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)
+
+
+@app.route('/account/<string:username>')
+def show_account(username):
+    form = UpdateAccountForm()
+    user = User.query.filter_by(username=username).first_or_404()
+
+    if user != current_user:
+        form.username.render_kw = {'disabled': 'true'}
+        form.email.render_kw = {'disabled': 'true'}
+        del form.submit
+    form.username.data = user.username
+    form.email.data = user.email
+
+    image_file = url_for(
+        'static', filename='profile_pics/' + user.image_file)
+    return render_template('account.html', title=username, image_file=image_file, form=form)
