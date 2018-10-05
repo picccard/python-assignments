@@ -7,6 +7,9 @@ app = Flask(__name__)
 # import secrets -> secrets.token_hex(16)
 app.config['SECRET_KEY'] = '0b23102c6ef9982b232a0423349365f0'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+# New default, pre-define to suppress error
+# Must be set before creating the SQLAlchemy-db instance
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
