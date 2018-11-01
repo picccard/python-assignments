@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% for i in range( videos_count ) %}
+<h1>Video</h1>
+<p><a href="video/{{ videos[i] }}"> {{ i+1 }}. {{ videos[i]}}</a></p>
+{% endfor %}
+<h1>SVG</h1>
+{% for i in range( svg_count ) %}
+<p><a href="svg/{{ svg[i] }}"> {{ i+1 }}. {{ svg[i]}}</a></p>
+{% endfor %}
+{% endblock content %}

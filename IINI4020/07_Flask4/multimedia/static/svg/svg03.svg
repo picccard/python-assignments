@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"
+    width="850" height="250">
+  <circle id="red-circle" cx="125" cy="125" r="110" stroke="black" stroke-width="2" fill="red" />
+  <text x="5" y="15" fill="red">A Red Circle, Click me</text>
+
+  <animate
+    xlink:href="#red-circle"
+    attributeName="cx"
+    from="125"
+    to="700"
+    dur="2s"
+    begin="click"
+    repeatCount="indefinite"
+    repeatDur="00:10"
+    fill="freeze" />
+</svg>

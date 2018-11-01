@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink"
+    width="550" height="550">
+  <polygon points="125,25 5,245 245,245"
+  stroke="black" stroke-width="2" fill="green" />
+  <text x="5" y="15" fill="green">A green polygon</text>
+</svg>

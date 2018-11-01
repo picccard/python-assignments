@@ -1,0 +1,8 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h3> {{ title }} </h3>
+<video width="320" height="240" controls="">
+    <source src="{{ video }}" type="video/mp4">
+    Sorry, your browser doesn't support HTML5 video.
+</video>
+{% endblock content %}
